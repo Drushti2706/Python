@@ -7,7 +7,6 @@ class MemoryGame:
         self.root = root
         self.root.title("Memory Match Game")
         self.buttons = []
-
         self.first = None
         self.second = None
         self.moves = 0
