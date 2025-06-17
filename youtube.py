@@ -1,20 +1,25 @@
-from pytube import YouTube
+import os
+import yt_dlp
 
 def download_video():
+    url = input("Paste the YouTube video URL: ").strip()
+
+    # Set output directory
+    download_folder = os.path.join(os.path.expanduser("~"), "YouTube")
+    os.makedirs(download_folder, exist_ok=True)
+
+    # Set options
+    ydl_opts = {
+        'outtmpl': os.path.join(download_folder, '%(title)s.%(ext)s'),
+        'format': 'bestvideo+bestaudio/best',  # Download best video+audio
+        'merge_output_format': 'mp4'
+    }
+
     try:
-        url = input("Enter YouTube video URL: ").strip()
-        yt = YouTube(url)
-        
-        print(f"Title: {yt.title}")
-        print("Downloading...")
-
-        # Get the highest resolution stream
-        stream = yt.streams.get_highest_resolution()
-        stream.download()
-
-        print("✅ Download complete!")
-
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+        print(f"Download completed and saved in: {download_folder}")
     except Exception as e:
-        print("❌ An error occurred:", e)
+        print("Download error:", e)
 
 download_video()
